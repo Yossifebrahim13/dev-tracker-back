@@ -1,28 +1,24 @@
 require("dotenv").config();
-const nodemailer = require("nodemailer");
+const SibApiV3Sdk = require('sib-api-v3-sdk');
 
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: process.env.SMTP_PORT,
-  secure: false,
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
+const client = SibApiV3Sdk.ApiClient.instance;
+client.authentications['api-key'].apiKey = process.env.SMTP_PASS;
 
 const sendMail = async (to, subject, html) => {
+  const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+  const sendSmtpEmail = {
+    to: [{ email: to }],
+    sender: { email: process.env.FROM_EMAIL },
+    subject,
+    htmlContent: html,
+  };
+
   try {
-    const info = await transporter.sendMail({
-      from: `"My App" <${process.env.FROM_EMAIL}>`,
-      to,
-      subject,
-      html,
-    });
-    console.log("Email sent:", info.messageId);
-    return info;
+    const data = await apiInstance.sendTransacEmail(sendSmtpEmail);
+    console.log("Email sent:", data);
+    return data;
   } catch (err) {
-    console.error("Email error:", err);
+    console.error("Email API error:", err);
     throw err;
   }
 };
