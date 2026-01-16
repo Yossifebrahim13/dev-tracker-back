@@ -1,29 +1,22 @@
 require("dotenv").config();
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const sendMail = async (to, subject, html) => {
-  const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT || 587),
-    secure: Number(process.env.SMTP_PORT) === 465,
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-    connectionTimeout: 10000,
-    greetingTimeout: 10000,
-    socketTimeout: 10000,
-    logger: true,
-    debug: true,
-  });
-
-  const info = await transporter.sendMail({
+  const { data, error } = await resend.emails.send({
     from: process.env.FROM_EMAIL,
     to,
     subject,
     html,
   });
-  return info;
+
+  if (error) {
+    console.error("Resend error:", error);
+    throw error;
+  }
+
+  return data;
 };
 
 module.exports = sendMail;
