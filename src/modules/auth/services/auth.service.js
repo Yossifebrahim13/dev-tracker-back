@@ -9,6 +9,8 @@ const jwt = require('jsonwebtoken');
 const sendMail = require("../../../utils/sendmailer");
 const { hashOtp, generateOTP, compareOtp } = require("../../../utils/otp");
 const tempUsers = [];
+
+
 const registerdev = async (name, email, password) => {
 
     const exists = await isExists(email);
@@ -38,8 +40,6 @@ const registerdev = async (name, email, password) => {
 
     return "If the email exists, an OTP was sent."
    
-
-
 };
 
 const otpToCreatAcc = async (otp, email) => {

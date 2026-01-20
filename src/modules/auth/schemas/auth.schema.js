@@ -16,4 +16,19 @@ const loginSchema = joi.object({
   password: joi.string().min(8).required(),
 });
 
-module.exports = { registerSchema , loginSchema }; 
+const createProjectSchema = joi.object({
+  name: joi.string().min(3).max(255).required(),
+  clientName: joi.string().min(2).max(255).required(),
+  hourlyRate: joi.number().min(0).required(),
+  description: joi.string().allow("", null),
+});
+
+const updateProjectSchema = joi.object({
+  name: joi.string().min(3).max(255),
+  clientName: joi.string().min(2).max(255),
+  hourlyRate: joi.number().min(0),
+  description: joi.string().allow("", null),
+  status: joi.string().valid("active", "paused", "completed"),
+});
+
+module.exports = { registerSchema , loginSchema , createProjectSchema , updateProjectSchema }; 
