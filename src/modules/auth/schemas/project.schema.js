@@ -27,6 +27,16 @@ const projectSchema = new mongoose.Schema(
       default: "active",
     },
 
+    isArchived: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
+
+    archivedAt: {
+      type: Date,
+    },
+
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Developer",
@@ -37,8 +47,8 @@ const projectSchema = new mongoose.Schema(
   {
     timestamps: true,
     versionKey: false,
-  }
+  },
 );
-
+projectSchema.index({ name: 1, owner: 1 }, { unique: true });
 
 module.exports = mongoose.model("Project", projectSchema);

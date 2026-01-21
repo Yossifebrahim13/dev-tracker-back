@@ -1,6 +1,6 @@
 // src/modules/projects/services/project.service.js
 const ApiError = require("../../../utils/apiErrors");
-const { createProject, isProjectExists } = require("../repositories/project.repository");
+const { createProject, isProjectExists, completeProject, getArchivedProjects } = require("../repositories/project.repository");
 
 const createDevProject = async ({ name, clientName, hourlyRate, description, developerId }) => {
   if (!developerId) throw new ApiError(404, "Developer not found");
@@ -10,4 +10,23 @@ const createDevProject = async ({ name, clientName, hourlyRate, description, dev
   return project;
 };
 
-module.exports = { createDevProject };
+
+const completedDevProject = async(developerId , projectId) => {
+if (!developerId) throw new ApiError(404, "Developer not found");
+if(!projectId) throw new ApiError(404 , "Project Not Found");
+ const deletedProject = await completeProject(developerId , projectId);
+   if (!deletedProject)
+    throw new ApiError(404, "Project not found or not authorized");
+
+return deletedProject;
+
+}
+
+const getDevProjectArchived = async (developerId, page, limit) => {
+  if (!developerId)
+    throw new ApiError(404, "Developer not found");
+
+  return await getArchivedProjects(developerId, page, limit);
+};
+
+module.exports = { createDevProject  , completedDevProject , getDevProjectArchived};
