@@ -9,6 +9,11 @@ const { projectRouter } = require("./modules/auth/routes/project.routes");
 const app = express();
 const port = 4200;
 app.set('trust proxy', 1)
+app.use(cors({
+  origin: 'http://localhost:55676', 
+  methods: ['GET','POST','PUT','DELETE','OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(
   helmet({
     contentSecurityPolicy: {
