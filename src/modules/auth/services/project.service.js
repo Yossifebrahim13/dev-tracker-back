@@ -1,6 +1,6 @@
 // src/modules/projects/services/project.service.js
 const ApiError = require("../../../utils/apiErrors");
-const { createProject, isProjectExists, completeProject, getArchivedProjects, getAllProjects, findAllProjects, deleteOneProject, getOneProject } = require("../repositories/project.repository");
+const { createProject, isProjectExists, completeProject, getArchivedProjects, getAllProjects, findAllProjects, deleteOneProject, getOneProject, deleteProjects } = require("../repositories/project.repository");
 
 const createDevProject = async ({ name, clientName, hourlyRate, description, developerId }) => {
   if (!developerId) throw new ApiError(404, "Developer not found");
@@ -48,4 +48,14 @@ if(oneProject.isArchived === false) throw new ApiError(401 , "you can delete pro
 
 }
 
-module.exports = { createDevProject  , completedDevProject , getDevProjectArchived , getAllDevProjects , deleteDevProject};
+const deleteAllDevProject = async(developerId) => {
+   if(!developerId) throw new ApiError(404 , "developer not found")
+  const result = await deleteProjects(developerId);
+
+  if (result.deletedCount === 0) {
+    throw new ApiError(404, "History is empty");
+  }
+    return deleteAllDevProject
+}
+
+module.exports = { createDevProject  , completedDevProject , getDevProjectArchived , getAllDevProjects , deleteDevProject , deleteAllDevProject};

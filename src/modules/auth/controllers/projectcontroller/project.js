@@ -6,6 +6,7 @@ const {
   getDevProjectArchived,
   getAllDevProjects,
   deleteDevProject,
+  deleteAllDevProject,
 } = require("../../services/project.service");
 
 const createProjectDev = async (req, res, next) => {
@@ -104,11 +105,24 @@ try {
 }
 }
 
+const deleteAllProjects = async (req, res , next) => {
+  try {
+    const developerId = req.user._id; 
+    const removedProjects  = await deleteAllDevProject(developerId);
+    if(!removedProjects) return next(new ApiError(404 , "No projects found in history"))
+      res.status(201).json({messsage:"history cleared successfully"})
 
-module.exports = {
+  } catch (error) {
+    next(error)
+  }
+}
+
+
+module.exports ={
   createProjectDev,
   completedProjectDev,
   getAllArchivedProjects,
   getAllProjects,
-  deleteProject
+  deleteProject,
+  deleteAllProjects
 };

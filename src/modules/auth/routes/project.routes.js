@@ -1,5 +1,5 @@
 const express = require('express');
-const { createProjectDev, completedProjectDev, getAllArchivedProjects, getAllProjects, deleteProject } = require('../controllers/projectcontroller/project');
+const { createProjectDev, completedProjectDev, getAllArchivedProjects, getAllProjects, deleteProject, deleteAllProjects } = require('../controllers/projectcontroller/project');
 const { protect } = require('../../../middlewares/auth.middleware');
 const { deleteOneProject } = require('../repositories/project.repository');
 const projectRouter = express.Router();
@@ -8,4 +8,5 @@ projectRouter.patch('/dev/projectdev/archiveprojectdev/:id' , protect , complete
 projectRouter.get('/dev/projectdev/archivedprojects/history'  , protect , getAllArchivedProjects)
 projectRouter.get('/dev/projectdev/projects' , protect , getAllProjects )
 projectRouter.delete('/dev/projectdev/deleteProject/:id' , protect , deleteProject)
+projectRouter.delete('/dev/projectdev/clearhistory' , protect , deleteAllProjects)
 module.exports = {projectRouter}

@@ -82,6 +82,11 @@ const getOneProject = async (projectId) => {
   return project;
 }
 
+const deleteProjects = async(ownerId) => {
+  const deletedProjects = await Project.deleteMany({owner:ownerId , isArchived: true,})
+  return deletedProjects;
+}
+
 module.exports = {
   createProject,
   isProjectExists,
@@ -89,5 +94,6 @@ module.exports = {
   getArchivedProjects,
   findAllProjects,
   deleteOneProject,
-  getOneProject
+  getOneProject, 
+  deleteProjects
 };
