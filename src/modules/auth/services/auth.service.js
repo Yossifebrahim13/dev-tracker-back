@@ -15,7 +15,8 @@ const { hashOtp, generateOTP, compareOtp } = require("../../../utils/otp");
 const tempUsers = [];
 
 const registerdev = async (name, email, password) => {
-  if(!email || !name || !password) throw new ApiError(400, "all fields are requierd");
+  if (!email || !name || !password)
+    throw new ApiError(400, "all fields are requierd");
   const exists = await isExists(email);
   if (exists) throw new ApiError(400, "Email already exists");
 
@@ -27,7 +28,7 @@ const registerdev = async (name, email, password) => {
   const expiresInMin = Number(process.env.OTP_EXPIRES_MIN || 15);
   const resetOTPExpires = new Date(Date.now() + expiresInMin * 60 * 1000);
   const token = jwt.sign(
-    { name, email, hashedPassword, resetOTP},
+    { name, email, hashedPassword, resetOTP },
     process.env.JWT_SECRET,
     { expiresIn: "10m" },
   );
@@ -57,27 +58,27 @@ const registerdev = async (name, email, password) => {
 };
 
 const otpToCreatAcc = async (otp, token) => {
-try {
+  try {
     if (!otp) throw new ApiError(400, "OTP is required");
 
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
-  if (!decoded) throw new ApiError(400, "Email is required");
-  const isMatchedOtp = await compareOtp(otp, decoded.resetOTP);
-  if (!isMatchedOtp) throw new ApiError(401, "Invalid OTP");
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const isMatchedOtp = await compareOtp(otp, decoded.resetOTP);
+    if (!isMatchedOtp) throw new ApiError(401, "Invalid OTP");
 
-  if (decoded.resetOTPExpires < new Date()) throw new ApiError(400, "OTP expired");
+    if (decoded.resetOTPExpires < new Date())
+      throw new ApiError(400, "OTP expired");
 
-  const developer = await Developer.create({
-    name: decoded.name,
-    email: decoded.email,
-    password: decoded.hashedPassword,
-  });
+    const developer = await Developer.create({
+      name: decoded.name,
+      email: decoded.email,
+      password: decoded.hashedPassword,
+    });
 
-  return developer;
-} catch (error) {
+    return developer;
+  } catch (error) {
+    if (error instanceof ApiError) throw error;
     throw new ApiError(401, "Your session has expired. Please register again.");
-        
-}
+  }
 };
 
 const logindev = async (email, password) => {
