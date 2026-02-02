@@ -80,7 +80,7 @@ const getAllProjects = async (req, res, next) => {
     const page = Math.max(0, Number(req.query.page) || 0);
     const limit = 10;
 
-    const { projects, totalActiveProjects } = await getAllDevProjects(
+    const { Projects, totalActiveProjects } = await getAllDevProjects(
       developerId,
       page,
       limit
@@ -90,8 +90,8 @@ const getAllProjects = async (req, res, next) => {
       page,
       limit,
       total: totalActiveProjects, 
-      count: projects.length,   
-      projects,
+      count: Projects.length,   
+      Projects,
     });
   } catch (error) {
     next(error);
