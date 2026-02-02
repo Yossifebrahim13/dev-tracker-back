@@ -25,10 +25,10 @@ return deletedProject;
 const getDevProjectArchived = async (developerId, page, limit) => {
   if (!developerId)
     throw new ApiError(404, "Developer not found");
-   const projects = await getArchivedProjects(developerId, page, limit);
+   const archivedProjects = await getArchivedProjects(developerId, page, limit);
    const totalHistory = await countAllArchivedProjects(developerId)
 
-  return {projects , totalHistory}
+  return {archivedProjects , totalHistory}
 };
 
 const getAllDevProjects = async (developerId, page, limit) => {
