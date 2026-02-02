@@ -32,7 +32,7 @@ const getDevProjectArchived = async (developerId, page, limit) => {
 const getAllDevProjects = async (developerId, page, limit) => {
     if (!developerId)
     throw new ApiError(404, "Developer not found");
-    const projects = await findAllProjects(developerId, page, limit)
+    const Projects = await findAllProjects(developerId, page, limit)
     const totalActiveProjects = await countAllProjects(developerId) 
   return {Projects , totalActiveProjects} ;
 }
