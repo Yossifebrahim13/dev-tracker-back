@@ -8,6 +8,6 @@ projectRouter.post('/dev/projectdev/createprojectdev' , protect , createProjectD
 projectRouter.patch('/dev/projectdev/archiveprojectdev/:id' , protect , completedProjectDev)
 projectRouter.get('/dev/projectdev/archivedprojects/history'  , protect , getAllArchivedProjects)
 projectRouter.get('/dev/projectdev/projects' , protect , getAllProjects )
-projectRouter.delete('/dev/projectdev/deleteProject/:id' , protect , deleteProject)
+projectRouter.delete('/dev/projectdev/deleteProject/:id' , protect ,noBodyAllowed, deleteProject)
 projectRouter.delete('/dev/projectdev/clearhistory' , protect , noBodyAllowed , deleteAllProjects)
 module.exports = {projectRouter}
