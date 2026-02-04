@@ -68,9 +68,14 @@ const getProjectFinancials = async (projectId) => {
   return result[0] || { earned: 0, remaining: 0, total: 0 };
 };
 
+const findAllTasksByProjectId = (projectId) => {
+  return taskSchema.find({ project: projectId })
+    .sort({ createdAt: -1 }); 
+};
 module.exports = {
   creatTaske,
   completeTaskById,
   findTaskById,
   getProjectFinancials,
+  findAllTasksByProjectId
 };

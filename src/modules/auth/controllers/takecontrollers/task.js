@@ -1,6 +1,6 @@
 const ApiError = require("../../../../utils/apiErrors");
 const { createTaskSchema } = require("../../schemas/auth.schema");
-const { createTaskService, completeTaskService, getProjectFinancialsService } = require("../../services/task.service");
+const { createTaskService, completeTaskService, getProjectFinancialsService, getAllTasks } = require("../../services/task.service");
 
 const createDevtask = async (req, res , next) => {
   try {
@@ -54,4 +54,21 @@ const getProjectFinancialsController = async (req, res, next) => {
   }
 };
 
-module.exports = {createDevtask  ,completeDevTask , getProjectFinancialsController}
+const getAllProjectTasks = async (req, res, next) => {
+  try {
+    const developerId = req.user._id;
+    const projectId = req.params["id"];
+
+    const tasks = await getAllTasks(projectId, developerId);
+
+    res.status(200).json({
+      message: "Tasks retrieved successfully",
+      results: tasks.length,
+      tasks,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = {createDevtask  ,completeDevTask , getProjectFinancialsController , getAllProjectTasks}
