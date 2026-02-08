@@ -61,4 +61,5 @@ const deleteAllDevProject = async(developerId) => {
     return deleteAllDevProject
 }
 
+
 module.exports = { createDevProject  , completedDevProject , getDevProjectArchived , getAllDevProjects , deleteDevProject , deleteAllDevProject};

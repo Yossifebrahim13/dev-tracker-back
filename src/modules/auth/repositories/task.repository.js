@@ -72,10 +72,18 @@ const findAllTasksByProjectId = (projectId) => {
   return taskSchema.find({ project: projectId })
     .sort({ createdAt: -1 }); 
 };
+
+const deleteCompletedTasks = async (projectId) => {
+  return taskSchema.deleteMany({
+    projectId: projectId,
+    status: 'done'
+  });
+};
 module.exports = {
   creatTaske,
   completeTaskById,
   findTaskById,
   getProjectFinancials,
-  findAllTasksByProjectId
+  findAllTasksByProjectId,
+  deleteCompletedTasks
 };

@@ -1,8 +1,14 @@
 const ApiError = require("../../../../utils/apiErrors");
 const { createTaskSchema } = require("../../schemas/auth.schema");
-const { createTaskService, completeTaskService, getProjectFinancialsService, getAllTasks } = require("../../services/task.service");
+const {
+  createTaskService,
+  completeTaskService,
+  getProjectFinancialsService,
+  getAllTasks,
+  deleteAllTasks,
+} = require("../../services/task.service");
 
-const createDevtask = async (req, res , next) => {
+const createDevtask = async (req, res, next) => {
   try {
     const { error } = createTaskSchema.validate(req.body);
     if (error) return next(new ApiError(400, error.details[0].message));
@@ -18,7 +24,6 @@ const createDevtask = async (req, res , next) => {
     next(error);
   }
 };
-
 
 const completeDevTask = async (req, res, next) => {
   try {
@@ -37,8 +42,6 @@ const completeDevTask = async (req, res, next) => {
     next(err);
   }
 };
-
-
 
 const getProjectFinancialsController = async (req, res, next) => {
   try {
@@ -71,4 +74,22 @@ const getAllProjectTasks = async (req, res, next) => {
   }
 };
 
-module.exports = {createDevtask  ,completeDevTask , getProjectFinancialsController , getAllProjectTasks}
+const deleteAllProjectTasks = async (req, res, next) => {
+  try {
+    const developerId = req.user._id;
+    const projectId = req.params["id"];
+    const deltedTask = await deleteAllTasks(projectId , developerId)
+    if(!deltedTask) return next(new ApiError(404  , "no Tasks Found"))
+      res.status(200).json({message:'Tasks Removed successfully'})
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = {
+  createDevtask,
+  completeDevTask,
+  getProjectFinancialsController,
+  getAllProjectTasks,
+  deleteAllProjectTasks
+};

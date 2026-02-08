@@ -1,6 +1,6 @@
 const ApiError = require("../../../utils/apiErrors");
 const { getOneActiveProjects } = require("../repositories/project.repository");
-const { creatTaske, findTaskById, getProjectFinancials, findAllTasksByProjectId } = require("../repositories/task.repository");
+const { creatTaske, findTaskById, getProjectFinancials, findAllTasksByProjectId, deleteCompletedTasks } = require("../repositories/task.repository");
 const projectSchema = require("../schemas/project.schema");
 
 const createTaskService = async (developerId, projectId, data) => {
@@ -37,7 +37,7 @@ const getAllTasks = async (projectId , developerId) => {
     throw new ApiError(401, "Unauthorized: missing developer or project id");
 
     const project = await projectSchema.findOne({ 
-        _id: projectId, 
+        _id: projectId,   
         owner: developerId 
     });
 
@@ -48,5 +48,21 @@ const getAllTasks = async (projectId , developerId) => {
     return tasks
 }
 
+const deleteAllTasks = async(projectId  , developerId) => {
+    if (!developerId || !projectId)
+    throw new ApiError(401, "Unauthorized: missing developer or project id");
+    
+    const project = await projectSchema.findOne({ 
+        _id: projectId,   
+        owner: developerId 
+    });
 
-module.exports = { createTaskService , completeTaskService , getProjectFinancialsService  , getAllTasks};
+    if (!project) {
+        throw new ApiError(403, "You don't have permission to access tasks for this project");
+    }
+    const deletedTask = await deleteCompletedTasks(projectId);
+    return deletedTask;
+}
+
+
+module.exports = { createTaskService , completeTaskService , getProjectFinancialsService  , getAllTasks , deleteAllTasks};

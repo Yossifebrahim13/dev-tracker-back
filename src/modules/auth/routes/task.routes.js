@@ -1,9 +1,10 @@
 const express = require('express');
-const { createDevtask, completeDevTask, getProjectFinancialsController, getAllProjectTasks } = require('../controllers/takecontrollers/task');
+const { createDevtask, completeDevTask, getProjectFinancialsController, getAllProjectTasks, deleteAllProjectTasks } = require('../controllers/takecontrollers/task');
 const { protect } = require('../../../middlewares/auth.middleware');
 const taskRouter =  express.Router();
 taskRouter.post('/dev/tasks/createtask/:id' , protect ,createDevtask)
 taskRouter.patch('/dev/:projectId/tasks/:taskId/complete', protect , completeDevTask)
 taskRouter.get('/dev/:projectId/financials' , protect ,getProjectFinancialsController)
 taskRouter.get('/dev/tasks/getalltasks/:id' , protect , getAllProjectTasks)
+taskRouter.delete('/dev/tasks/deletealltasks/:id' , protect , deleteAllProjectTasks)
 module.exports = taskRouter;
