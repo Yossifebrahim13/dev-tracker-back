@@ -74,8 +74,9 @@ const findAllTasksByProjectId = (projectId) => {
 };
 
 const deleteCompletedTasks = async (projectId) => {
+  
   return taskSchema.deleteMany({
-    projectId: projectId,
+    project: projectId,
     status: 'done'
   });
 };
